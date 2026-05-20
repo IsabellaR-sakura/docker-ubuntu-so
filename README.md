@@ -54,28 +54,16 @@ Desde la terminal:
 
 ```bash
 aws s3api create-bucket \
---bucket user-10203040-ueia-so \
---region us-east-1
+--bucket user-20052026-ueia-so \
+--region us-east-2
 ```
 
-IMPORTANTE:
-
-Cambiar:
-
-```plaintext
-10203040
-```
-
-por tu documento o identificador único.
 
 ---
 
 # 📸 Evidencia 1
 
-Captura de:
-
-- comando ejecutado
-- respuesta JSON de AWS
+<img width="2536" height="155" alt="Captura de pantalla 2026-05-20 111515" src="https://github.com/user-attachments/assets/28c87986-8ba6-48d9-82e6-04fc0a847941" />
 
 ---
 
