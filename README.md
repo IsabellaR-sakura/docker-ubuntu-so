@@ -61,9 +61,10 @@ aws s3api create-bucket \
 
 ---
 
-# 📸 Evidencia 1
+# 📸 Evidencia
 
-<img width="2536" height="155" alt="Captura de pantalla 2026-05-20 111515" src="https://github.com/user-attachments/assets/28c87986-8ba6-48d9-82e6-04fc0a847941" />
+<img width="1329" height="405" alt="image" src="https://github.com/user-attachments/assets/8c8f1d91-ae20-4883-a2a1-adb6e5174adc" />
+
 
 ---
 
@@ -78,7 +79,7 @@ Seguimos en:
 Crear archivo:
 
 ```bash
-echo "Hola AWS" > archivo1.txt
+echo "macarena" > archivoprue.txt
 ```
 
 Verificar:
@@ -92,7 +93,7 @@ ls
 # 2.3 Subir archivo a S3 usando AWS CLI
 
 ```bash
-aws s3 cp archivo1.txt s3://user-10203040-ueia-so/archivo1.txt
+aws s3 cp archivoprue.txt s3://user-20052026-ueia-so/archivoprue.txt
 ```
 
 ---
@@ -100,17 +101,14 @@ aws s3 cp archivo1.txt s3://user-10203040-ueia-so/archivo1.txt
 # 2.4 Verificar contenido del bucket
 
 ```bash
-aws s3 ls s3://user-10203040-ueia-so/
+aws s3 ls s3://user-20052026-ueia-so/
 ```
 
 ---
 
-# 📸 Evidencia 2
+# 📸 Evidencia
 
-Captura de:
-
-- comando `aws s3 ls`
-- archivo listado en el bucket
+<img width="2536" height="155" alt="Captura de pantalla 2026-05-20 111515" src="https://github.com/user-attachments/assets/28c87986-8ba6-48d9-82e6-04fc0a847941" />
 
 ---
 
@@ -119,21 +117,21 @@ Captura de:
 Crear carpeta:
 
 ```bash
-mkdir descargas_cli
+mkdir descargas
 ```
 
 Descargar:
 
 ```bash
 aws s3 cp \
-s3://user-10203040-ueia-so/archivo1.txt \
-./descargas_cli/archivo1.txt
+s3://user-20052026-ueia-so/archivoprue.txt \
+./descargas/archivoprue.txt
 ```
 
 Entrar a la carpeta:
 
 ```bash
-cd descargas_cli
+cd descargas
 ```
 
 Verificar:
@@ -144,11 +142,9 @@ ls -l
 
 ---
 
-# 📸 Evidencia 3
+# 📸 Evidencia 
 
-Captura de:
-
-- terminal mostrando el archivo descargado
+<img width="2559" height="97" alt="image" src="https://github.com/user-attachments/assets/3b802e22-3020-4b03-9c98-7ffb5b995945" />
 
 ---
 
@@ -203,67 +199,33 @@ import os
 import boto3
 
 s3 = boto3.client('s3')
+BUCKET_NAME = 'user-20052026-ueia-so'
 
-BUCKET_NAME = 'user-10203040-ueia-so'
+# 1. Cargar archivo individual
+s3.upload_file('archivoprue.txt', BUCKET_NAME, 'boto3_archivoprue.txt')
+print("[OK] Archivo individual cargado con boto3.")
 
-# Subir archivo individual
-s3.upload_file(
-    'archivo1.txt',
-    BUCKET_NAME,
-    'boto3_archivo1.txt'
-)
-
-print("[OK] Archivo individual cargado.")
-
-# Crear carpeta de descargas
+# 2. Descargar en otra carpeta diferente
 os.makedirs('descargas_boto3', exist_ok=True)
+s3.download_file(BUCKET_NAME, 'boto3_archivoprue.txt', 'descargas_boto3/boto3_archivoprue.txt')
+print("[OK] Archivo individual descargado con boto3.")
 
-# Descargar archivo
-s3.download_file(
-    BUCKET_NAME,
-    'boto3_archivo1.txt',
-    'descargas_boto3/boto3_archivo1.txt'
-)
-
-print("[OK] Archivo descargado.")
-
-# Archivos múltiples
+# 3. Prueba con 3 archivos de texto (Múltiples archivos)
 archivos = ['test1.txt', 'test2.txt', 'test3.txt']
-
 for a in archivos:
     with open(a, 'w') as f:
-        f.write(f"Contenido de {a}")
+        f.write(f"Contenido temporal de {a}")
 
-# Subida múltiple
+# Carga múltiple iterativa
 for a in archivos:
-    s3.upload_file(
-        a,
-        BUCKET_NAME,
-        f"multi/{a}"
-    )
+    s3.upload_file(a, BUCKET_NAME, f"multi/{a}")
+print("[OK] Tres archivos de texto cargados en la carpeta 'multi/'.")
 
-print("[OK] Archivos múltiples cargados.")
-
-# Descarga múltiple
+# Descarga múltiple iterativa
 for a in archivos:
-    s3.download_file(
-        BUCKET_NAME,
-        f"multi/{a}",
-        f"descargas_boto3/{a}"
-    )
-
-print("[OK] Archivos múltiples descargados.")
+    s3.download_file(BUCKET_NAME, f"multi/{a}", f"descargas_boto3/{a}")
+print("[OK] Tres archivos de texto descargados localmente.")
 ```
-
-Guardar:
-
-```plaintext
-CTRL + O
-ENTER
-CTRL + X
-```
-
----
 
 # 3.3 Ejecutar script
 
@@ -273,12 +235,9 @@ python3 s3_test.py
 
 ---
 
-# 📸 Evidencia 4
+# 📸 Evidencia
 
-Captura de:
-
-- mensajes `[OK]`
-- ejecución exitosa
+<img width="921" height="46" alt="image" src="https://github.com/user-attachments/assets/1a750171-8a27-4323-91a1-6db5742151e4" />
 
 ---
 
@@ -326,8 +285,6 @@ cryptography==42.0.5
 python-multipart==0.0.9
 mangum==0.17.0
 ```
-
-Guardar y salir.
 
 ---
 
@@ -474,8 +431,6 @@ async def get_image(usuario: str, nombre: str):
 handler = Mangum(app)
 ```
 
-Guardar y salir.
-
 ---
 
 # 4.4 Crear Dockerfile
@@ -487,9 +442,7 @@ nano Dockerfile
 Pegar:
 
 ```dockerfile
-FROM python:3.11-slim
-
-WORKDIR /app
+FROM public.ecr.aws/lambda/python:3.11
 
 COPY requirements.txt .
 
@@ -497,12 +450,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-EXPOSE 8080
-
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["main.handler"]
 ```
-
-Guardar y salir.
 
 ---
 
@@ -560,13 +509,9 @@ NO la contraseña normal.
 
 ---
 
-# 📸 Evidencia 5
+# 📸 Evidencia 
 
-Captura del repositorio GitHub con:
-
-- main.py
-- Dockerfile
-- requirements.txt
+<img width="921" height="506" alt="image" src="https://github.com/user-attachments/assets/1a57a63d-04b0-44e7-a299-cbe9f87a2aeb" />
 
 ---
 
@@ -585,7 +530,7 @@ Configuración:
 ## Nombre
 
 ```plaintext
-Servidor-FastAPI-SO
+Servidor-Fastapi-So
 ```
 
 ## Sistema operativo
@@ -597,7 +542,7 @@ Ubuntu 22.04 LTS
 ## Tipo
 
 ```plaintext
-t2.micro
+t3.micro
 ```
 
 ## Key Pair
@@ -605,7 +550,7 @@ t2.micro
 Crear:
 
 ```plaintext
-llave-taller.pem
+key-taller.pem
 ```
 
 Guardar el `.pem` en:
@@ -636,12 +581,9 @@ Guardar reglas.
 
 ---
 
-# 📸 Evidencia 6
+# 📸 Evidencia 
 
-Captura de:
-
-- inbound rules
-- puertos 8000 y 8080 abiertos
+<img width="921" height="484" alt="image" src="https://github.com/user-attachments/assets/70290893-ffa7-4d1a-8594-9a4b1789a3b9" />
 
 ---
 
@@ -656,13 +598,13 @@ Desde:
 Ejecutar:
 
 ```bash
-chmod 400 llave-taller.pem
+chmod 400 key-taller.pem
 ```
 
 Conectarse:
 
 ```bash
-ssh -i "llave-taller.pem" ubuntu@IP_PUBLICA
+ssh -i "key-taller.pem" ubuntu@IP_PUBLICA
 ```
 
 ---
@@ -751,9 +693,9 @@ http://IP_PUBLICA:8000/docs
 
 ---
 
-# 📸 Evidencia 7
+# 📸 Evidencia 
 
-Captura de Swagger funcionando.
+<img width="926" height="92" alt="image" src="https://github.com/user-attachments/assets/d2e277f8-e432-4450-8c0c-5d4a52a345f9" />
 
 ---
 
@@ -804,13 +746,9 @@ sudo systemctl status fastapi
 
 ---
 
-# 📸 Evidencia 8
+# 📸 Evidencia 
 
-Captura de:
-
-```plaintext
-active (running)
-```
+<img width="918" height="182" alt="image" src="https://github.com/user-attachments/assets/e5a4d648-5a8b-43bf-acfa-87f8abe08aa4" />
 
 ---
 
@@ -856,11 +794,7 @@ docker ps
 
 # 📸 Evidencia 9
 
-Captura de:
-
-```bash
-docker ps
-```
+<img width="921" height="411" alt="image" src="https://github.com/user-attachments/assets/b945fd25-01c9-4cf2-832a-2cedba8bd677" />
 
 ---
 
@@ -885,6 +819,7 @@ fastapi-aws-taller
 # 10.2 Login ECR
 
 ```bash
+DOCKER_BUILDKIT=0 docker build --platform linux/amd64 -t fastapi-aws-taller .
 aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin TU_ID.dkr.ecr.us-east-1.amazonaws.com
 ```
 
@@ -906,13 +841,9 @@ docker push TU_ID.dkr.ecr.us-east-1.amazonaws.com/fastapi-aws-taller:latest
 
 ---
 
-# 📸 Evidencia 10
+# 📸 Evidencia
 
-Captura de ECR mostrando:
-
-```plaintext
-latest
-```
+<img width="921" height="171" alt="image" src="https://github.com/user-attachments/assets/23bf6dd1-2d27-4c06-9365-1b14e8449ad1" />
 
 ---
 
@@ -954,118 +885,13 @@ Crear URL.
 
 ---
 
-# 📸 Evidencia 11
+# 📸 Evidencia
 
-Captura mostrando:
-
-- URL pública Lambda
+<img width="921" height="504" alt="image" src="https://github.com/user-attachments/assets/e84ef59a-f522-4c13-8e93-b765f117c6fe" />
 
 ---
 
-# 12. PRUEBAS FINALES
-
-Abrir:
-
-```plaintext
-https://URL_LAMBDA/docs
-```
-
-Probar:
-
-## Error 415
-
-Subir:
-
-```plaintext
-archivo .txt
-```
-
-Debe responder:
-
-```json
-{
-  "detail": "Formato inválido"
-}
-```
-
----
-
-## Subida correcta
-
-Subir:
-
-```plaintext
-imagen PNG o JPG
-```
-
-Debe responder:
-
-```json
-{
-  "mensaje": "Imagen subida correctamente"
-}
-```
-
----
-
-# 📸 Evidencia 12
-
-Capturas de:
-
-- error 415
-- subida exitosa
-
----
-
-# 13. COMANDOS ÚTILES
-
-## Ver contenedores
-
-```bash
-docker ps
-```
-
-## Ver logs Docker
-
-```bash
-docker logs app_taller
-```
-
-## Reiniciar servicio FastAPI
-
-```bash
-sudo systemctl restart fastapi
-```
-
-## Estado servicio
-
-```bash
-sudo systemctl status fastapi
-```
-
-## Entrar a carpeta principal
-
-```bash
-cd ~/Taller_AWS
-```
-
----
-
-# 14. TECNOLOGÍAS UTILIZADAS
-
-- AWS S3
-- AWS EC2
-- AWS Lambda
-- AWS ECR
-- Python
-- FastAPI
-- Docker
-- SQLAlchemy
-- boto3
-- GitHub
-
----
 
 # 15. AUTOR
 
-Proyecto desarrollado para el Taller AWS de Sistemas Operativos.
+Isabella Ramirez Tobon - Valentina Santana Moncada
